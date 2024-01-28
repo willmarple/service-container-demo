@@ -28,10 +28,12 @@ class Cards extends Page
             ]);
         }
 
-        $paymentMethods = Stripe::client()->paymentMethods->all([
+        $data = Stripe::client()->paymentMethods->all([
             'customer' => $user->stripe_id,
             'type' => 'card',
         ])['data'];
+
+        $paymentMethods = collect($data)->map(fn ($paymentMethod) => $paymentMethod->card->toArray())->all();
 
         ray('BUILDING VIEW DATA', $paymentMethods);
 
