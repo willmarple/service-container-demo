@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\FilamentServiceProvider;
+use App\Providers\StripeServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -167,7 +169,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
+        FilamentServiceProvider::class,
+        StripeServiceProvider::class,
     ])->toArray(),
 
     /*
