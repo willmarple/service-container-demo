@@ -33,12 +33,22 @@ class Cards extends Page
             'type' => 'card',
         ])['data'];
 
-        $paymentMethods = collect($data)->map(fn ($paymentMethod) => $paymentMethod->card->toArray())->all();
+        $paymentMethods = collect($data)->map(fn ($paymentMethod) => [
+            'id' => $paymentMethod->id,
+            ...$paymentMethod->card->toArray()
+        ])->all();
 
         ray('BUILDING VIEW DATA', $paymentMethods);
 
         return [
             'paymentMethods' => $paymentMethods,
         ];
+    }
+
+    public function deleteCard(string $paymentMethodId)
+    {
+        Stripe::client()->paymentMethods->detach(
+            $paymentMethodId
+        );
     }
 }
