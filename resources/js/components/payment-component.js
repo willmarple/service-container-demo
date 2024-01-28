@@ -34,7 +34,10 @@ export default function paymentComponent() {
                     console.log('PaymentMethod created', result);
                     this.paymentMethod = result.paymentMethod;
                     const newStoredCard = await createSetupIntent(this.paymentMethod.id);
-                    window.location.reload();
+
+                    this.$wire.dispatch('cardadded');
+
+                    this.card.clear();
                 }
             } catch (error) {
                 console.error(error);

@@ -1,4 +1,4 @@
-<div x-data="paymentComponent($wire)" x-init="init()">
+<div x-data="paymentComponent()" x-init="init()">
     <div wire:ignore id="card-element" class='mb-8'>
         <!-- A Stripe Element will be inserted here. -->
     </div>
