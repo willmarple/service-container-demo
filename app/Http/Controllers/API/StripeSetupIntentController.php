@@ -18,8 +18,6 @@ class StripeSetupIntentController
         /** @var User $user */
         $user = auth()->user();
 
-        ray('USER STRIPE ID', $user->stripe_id);
-
         $setupIntent = Stripe::client()->setupIntents->create([
             'customer'             => $user->stripe_id,
             'payment_method_types' => ['card'],
