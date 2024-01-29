@@ -15,8 +15,6 @@ class FixtureService
 
     public function getFixture($key, callable $callback)
     {
-        ray('GETTING FIXTURE', $key);
-
         $filePath = $this->getFilePath($key);
 
         if (File::exists($filePath)) {

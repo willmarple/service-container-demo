@@ -12,7 +12,6 @@ class StripeTestService
 
     public function client()
     {
-        ray('USING TEST STRIPE CLIENT');
         return new StripeTestClient($this->stripeService);
     }
 }
