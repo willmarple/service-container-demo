@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\Stripe\StripeService;
+use App\Testing\Services\Stripe\StripeTestService;
 use Illuminate\Support\ServiceProvider;
 
 class StripeServiceProvider extends ServiceProvider
@@ -12,7 +13,7 @@ class StripeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton( StripeService::class, fn() => new StripeService() );
+        $this->app->singleton(StripeService::class, fn () => new StripeService());
     }
 
     /**

@@ -20,5 +20,5 @@ Route::middleware('auth')->group(function () {
         return $request->user();
     });
 
-    Route::post('/stripe/setup-intent', [StripeSetupIntentController::class, 'store']);
+    Route::post('/stripe/setup-intent', [StripeSetupIntentController::class, 'store'])->name('stripe.setup-intent.create');
 });

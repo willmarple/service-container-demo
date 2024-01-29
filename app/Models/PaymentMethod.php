@@ -31,7 +31,7 @@ class PaymentMethod extends Model
                 'payment_method_id' => $item['id'],
                 'brand' => $item['card']['brand'],
                 'last4' => $item['card']['last4'],
-                'exp_month' => $item['card']['exp_month'],
+                'exp' => $item['card']['exp_month'] . '/' . $item['card']['exp_year'],
                 'created_at' => $item['created'],
             ];
         }, $data);
@@ -44,7 +44,6 @@ class PaymentMethod extends Model
        Stripe::client()->paymentMethods->detach(
            $this->payment_method_id
        );
-       ray('deleting');
        parent::delete();
    }
 }
