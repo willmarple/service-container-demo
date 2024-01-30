@@ -30,7 +30,10 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerStripeService()
     {
-        $this->app->singleton(StripeService::class, fn () => new StripeService());
+        $this->app->bind(StripeService::class, function () {
+            ray('RESOLVING STRIPE SERVICE');
+            return new StripeService();
+        });
     }
 
     private function registerPayPalService()
