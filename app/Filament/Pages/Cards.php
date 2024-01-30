@@ -4,7 +4,8 @@ namespace App\Filament\Pages;
 
 use App\Models\PaymentMethod;
 use App\Models\User;
-use App\Services\Stripe\Facades\Stripe;
+use App\Services\Concerns\Enums\ProcessorTypesEnum;
+use App\Services\Support\Facades\Payment;
 use Carbon\Carbon;
 use Filament\Pages\Page;
 use Filament\Tables\Actions\DeleteAction;
@@ -28,18 +29,7 @@ class Cards extends Page implements HasTable
         /** @var User $user */
         $user = auth()->user();
 
-        if (!$user->stripe_id) {
-            $customer = Stripe::client()->customers->create([
-                'email' => $user->email,
-                'name' => $user->name,
-            ]);
-
-            $user = tap($user)->update([
-                'stripe_id' => $customer->id,
-            ]);
-        }
-
-        $data = Stripe::client()->paymentMethods->all([
+        $data = Payment::client()->paymentMethods->all([
             'customer' => $user->stripe_id,
             'type' => 'card',
         ])['data'];
@@ -60,13 +50,14 @@ class Cards extends Page implements HasTable
         $user = auth()->user();
 
         if (!$user->stripe_id) {
-            $customer = Stripe::client()->customers->create([
+            $customer = Payment::client()->customers->create([
                 'email' => $user->email,
                 'name' => $user->name,
             ]);
 
             $user = tap($user)->update([
                 'stripe_id' => $customer->id,
+                'processor' => ProcessorTypesEnum::Stripe->value,
             ]);
         }
 

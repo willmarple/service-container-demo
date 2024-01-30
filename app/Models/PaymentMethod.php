@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Services\Stripe\Facades\Stripe;
+use App\Services\Support\Facades\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 
@@ -21,7 +21,7 @@ class PaymentMethod extends Model
 
     public function getRows()
     {
-        $data = Stripe::client()->paymentMethods->all([
+        $data = Payment::client()->paymentMethods->all([
             'customer' => self::$customerId,
             'type' => 'card',
         ])['data'];
@@ -41,7 +41,7 @@ class PaymentMethod extends Model
 
    public function delete()
    {
-       Stripe::client()->paymentMethods->detach(
+       Payment::client()->paymentMethods->detach(
            $this->payment_method_id
        );
        parent::delete();

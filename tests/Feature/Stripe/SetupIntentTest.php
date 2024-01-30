@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\Stripe\Facades\Stripe;
 use App\Models\User;
 use App\Services\Stripe\StripeService;
 use App\Testing\Services\Stripe\StripeTestService;
@@ -9,12 +8,13 @@ use App\Testing\Support\FixtureService;
 beforeEach(function () {
     $fixtureService = app(FixtureService::class);
     $liveService = app(StripeService::class);
-    app()->instance(StripeService::class, new StripeTestService($liveService));
+    $testService = new StripeTestService($liveService);
+    app()->instance(StripeService::class, $testService);
 
-    $customer = $fixtureService->getFixture('stripeCustomer', function () {
+    $customer = $fixtureService->getFixture('stripeCustomer', function () use ($testService) {
         $user = User::factory()->create();
 
-        $customer = Stripe::client()->customers->create([
+        $customer = $testService->client()->customers->create([
             'email' => $user->email,
             'name' => $user->name,
         ]);
@@ -26,8 +26,8 @@ beforeEach(function () {
         return $customer;
     });
 
-    $paymentMethod = $fixtureService->getFixture('stripePaymentMethod', function () use ($customer) {
-        $paymentMethod = Stripe::client()->paymentMethods->create([
+    $paymentMethod = $fixtureService->getFixture('stripePaymentMethod', function () use ($customer, $testService) {
+        $paymentMethod = $testService->client()->paymentMethods->create([
             'type' => 'card',
             'card' => ['token' => 'tok_visa'],
             'billing_details' => [
@@ -42,6 +42,7 @@ beforeEach(function () {
 
     $this->stripeCustomer = $customer;
     $this->stripePaymentMethod = $paymentMethod;
+    $this->stripeTestService = $testService;
 
     $user = User::query()->where('stripe_id', $customer['id'])->firstOrFail();
     $this->actingAs($user);
@@ -49,7 +50,7 @@ beforeEach(function () {
 
 it('confirms a setup intent', function () {
     /**
-     * How can we call the route and interact with exactly as it
+     * How can we call the route and interact with it exactly as it
      * would be in a live setting, but instead of making a live
      * call to Stripe's API each time, use our FixtureService to
      * cache the response and return it on subsequent calls?

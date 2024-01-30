@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
-use App\Services\Stripe\Facades\Stripe;
+use App\Services\Support\Facades\Payment;
 use Illuminate\Http\Request;
 
 class StripeSetupIntentController
@@ -18,7 +18,7 @@ class StripeSetupIntentController
         /** @var User $user */
         $user = auth()->user();
 
-        $setupIntent = Stripe::client()->setupIntents->create([
+        $setupIntent = Payment::client()->setupIntents->create([
             'customer'             => $user->stripe_id,
             'payment_method_types' => ['card'],
             'payment_method'       => $paymentMethodId,

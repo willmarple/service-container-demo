@@ -1,7 +1,6 @@
 <?php
 
 use App\Providers\FilamentServiceProvider;
-use App\Providers\StripeServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -172,7 +171,6 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         FilamentServiceProvider::class,
-        StripeServiceProvider::class,
     ])->toArray(),
 
     /*

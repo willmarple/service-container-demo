@@ -2,9 +2,10 @@
 
 namespace App\Services\Stripe;
 
+use App\Services\Concerns\Contracts\PaymentProcesor;
 use Stripe\StripeClient;
 
-class StripeService
+class StripeService implements PaymentProcesor
 {	protected StripeClient $stripe;
 
 	public function __construct() {
